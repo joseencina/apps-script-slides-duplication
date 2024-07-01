@@ -37,8 +37,12 @@ Save the script by clicking on the disk icon or pressing `Ctrl+S`.
 Add a trigger to run automatically at specific intervals or events.
    - In the Apps Script editor, click on the clock icon to open the `Triggers` menu.
    - Click on `+ Add Trigger` at the bottom to configure a trigger.
+   - Select main function to be triggered*.
    - Select the time or the frequency this code will be triggered.
    - Save the trigger settings.
+
+> [!NOTE]
+> This code is using the main function `duplicate()` to be executed from the trigger configuration.
 
 ## Apps Script Code
 
@@ -147,3 +151,27 @@ sendEmail: function(date,fileId) {
 
 >[!IMPORTANT]
 > `emailConfig()` method is added as an auxiliar function on the complete code for email configuration to be built easily.
+
+
+### External Function Initiator
+
+The `duplicate()` function is the entry point for Apps Script configuration to be able to set-up a trigger.
+
+```javascript
+function duplicate() {
+    _main.init(dataConfig);
+}
+```
+
+It is possible to make this function to be triggered bi-weekly by adding a condition on the week number.
+
+```javascript
+function duplicate() {
+  let weekNumber = Utilities.formatDate(new Date(), "GMT", "w") -1;
+  if(weekNumber % 2 == 0) {
+    _main.init(dataConfig);
+  }
+}
+```
+> [!NOTE]
+> Google Apps Script triggers are only configurable by Weekly basics. It is possible to configure a trigger driven by calendar event too.
